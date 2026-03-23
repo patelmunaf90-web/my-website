@@ -1083,80 +1083,6 @@ const TechStack = () => {
   );
 };
 
-const Newsletter = () => {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
-    
-    try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        setEmail("");
-      } else {
-        const data = await response.json();
-        alert(data.error || 'Something went wrong. Please check your SMTP settings.');
-        setStatus('idle');
-      }
-    } catch (error) {
-      console.error('Subscription error:', error);
-      alert('Failed to connect to the server. Please check your internet connection.');
-      setStatus('idle');
-    }
-  };
-
-  return (
-    <section className="py-24 px-4 bg-indigo-600 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
-      </div>
-      
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Stay Updated with Global Software</h2>
-        <p className="text-indigo-100 mb-10 text-lg">Subscribe to our newsletter to get the latest updates on our products and exclusive offers.</p>
-        
-        {status === 'success' ? (
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 inline-block"
-          >
-            <p className="text-white font-bold flex items-center gap-2">
-              <Zap size={20} className="text-yellow-400" /> Thank you for subscribing!
-            </p>
-          </motion.div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-            <input 
-              type="email" 
-              required
-              placeholder="Enter your email address"
-              className="flex-1 px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-indigo-200 focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button 
-              disabled={status === 'loading'}
-              className="px-8 py-4 bg-white text-indigo-600 font-bold rounded-2xl hover:bg-indigo-50 transition-all shadow-lg disabled:opacity-50"
-            >
-              {status === 'loading' ? 'Subscribing...' : 'Subscribe Now'}
-            </button>
-          </form>
-        )}
-      </div>
-    </section>
-  );
-};
-
 const Footer = ({ onPolicyClick }: { onPolicyClick: (type: 'privacy' | 'terms' | 'refund') => void }) => {
   return (
     <footer className="bg-slate-950 text-white py-16 px-4">
@@ -1273,7 +1199,6 @@ export default function App() {
             <DemoSection />
             <Pricing />
             <FAQ />
-            <Newsletter />
             <Contact />
           </>
         ) : (
