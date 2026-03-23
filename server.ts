@@ -53,6 +53,7 @@ async function startServer() {
 
   // Serve sitemap.xml and robots.txt explicitly
   app.get('/sitemap.xml', (req, res) => {
+    res.header('Content-Type', 'application/xml');
     res.sendFile(path.join(process.cwd(), 'public', 'sitemap.xml'));
   });
 
