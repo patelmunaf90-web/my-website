@@ -61,8 +61,8 @@ async function startServer() {
     res.sendFile(path.join(process.cwd(), 'public', 'robots.txt'));
   });
 
-  app.get('/google06e1977f8036b4cf.html', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'google06e1977f8036b4cf.html'));
+  app.get('/google*.html', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', req.path));
   });
 
   // Vite middleware for development

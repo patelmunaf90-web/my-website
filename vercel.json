@@ -35,8 +35,8 @@
       "destination": "/robots.txt"
     },
     {
-      "source": "/google06e1977f8036b4cf.html",
-      "destination": "/google06e1977f8036b4cf.html"
+      "source": "/google(.*).html",
+      "destination": "/google$1.html"
     },
     {
       "source": "/(.*)",
