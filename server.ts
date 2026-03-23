@@ -51,6 +51,19 @@ async function startServer() {
     }
   });
 
+  // Serve sitemap.xml and robots.txt explicitly
+  app.get('/sitemap.xml', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'sitemap.xml'));
+  });
+
+  app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'robots.txt'));
+  });
+
+  app.get('/google06e1977f8036b4cf.html', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'google06e1977f8036b4cf.html'));
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
