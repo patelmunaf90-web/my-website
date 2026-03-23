@@ -1180,13 +1180,38 @@ const ScrollToTop = () => {
 export default function App() {
   const [view, setView] = useState<'home' | 'privacy' | 'terms' | 'refund'>('home');
 
+  // Handle initial path and browser navigation
   useEffect(() => {
+    const path = window.location.pathname.replace('/', '');
+    if (['privacy', 'terms', 'refund'].includes(path)) {
+      setView(path as any);
+    } else {
+      setView('home');
+    }
+
+    const handlePopState = () => {
+      const currentPath = window.location.pathname.replace('/', '');
+      if (['privacy', 'terms', 'refund'].includes(currentPath)) {
+        setView(currentPath as any);
+      } else {
+        setView('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (newView: 'home' | 'privacy' | 'terms' | 'refund') => {
+    setView(newView);
+    const path = newView === 'home' ? '/' : `/${newView}`;
+    window.history.pushState({}, '', path);
     window.scrollTo(0, 0);
-  }, [view]);
+  };
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      <Navbar onHomeClick={() => setView('home')} />
+      <Navbar onHomeClick={() => navigateTo('home')} />
       <main>
         {view === 'home' ? (
           <>
@@ -1202,10 +1227,10 @@ export default function App() {
             <Contact />
           </>
         ) : (
-          <PolicyView type={view as any} onClose={() => setView('home')} />
+          <PolicyView type={view as any} onClose={() => navigateTo('home')} />
         )}
       </main>
-      <Footer onPolicyClick={(type) => setView(type)} />
+      <Footer onPolicyClick={(type) => navigateTo(type)} />
       <ScrollToTop />
       
       {/* Floating Action Buttons */}

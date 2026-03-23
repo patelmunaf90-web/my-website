@@ -35,8 +35,20 @@
       "destination": "/robots.txt"
     },
     {
-      "source": "/google(.*).html",
-      "destination": "/google$1.html"
+      "source": "/google:path.html",
+      "destination": "/google:path.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/refund",
+      "destination": "/index.html"
     },
     {
       "source": "/(.*)",
