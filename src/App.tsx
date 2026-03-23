@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { 
   School, 
   Stethoscope, 
@@ -100,14 +100,10 @@ const PaymentModal = ({ isOpen, onClose, planName, price }: { isOpen: boolean, o
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3">
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Other UPI ID</p>
                 <p className="text-xs font-mono font-bold text-slate-600">fzspatel007@ibl</p>
-              </div>
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">UPI Number</p>
-                <p className="text-xs font-mono font-bold text-slate-600">8200109488</p>
               </div>
             </div>
           </div>
@@ -132,14 +128,119 @@ const PaymentModal = ({ isOpen, onClose, planName, price }: { isOpen: boolean, o
   );
 };
 
-const Navbar = () => {
+const PolicyView = ({ type, onClose }: { type: 'privacy' | 'terms' | 'refund', onClose: () => void }) => {
+  const content = {
+    privacy: {
+      title: "Privacy Policy",
+      lastUpdated: "March 23, 2026",
+      sections: [
+        {
+          title: "1. Information We Collect",
+          text: "We collect information you provide directly to us, such as when you fill out a contact form or purchase a subscription. This may include your name, email address, phone number, and business details."
+        },
+        {
+          title: "2. How We Use Your Information",
+          text: "We use the information we collect to provide, maintain, and improve our services, to process transactions, and to communicate with you about our products and offers."
+        },
+        {
+          title: "3. Data Security",
+          text: "We implement industry-standard security measures to protect your personal information from unauthorized access, disclosure, or destruction."
+        },
+        {
+          title: "4. Third-Party Sharing",
+          text: "We do not sell or share your personal information with third parties for their marketing purposes. We only share data with service providers who help us operate our business."
+        }
+      ]
+    },
+    terms: {
+      title: "Terms of Service",
+      lastUpdated: "March 23, 2026",
+      sections: [
+        {
+          title: "1. Acceptance of Terms",
+          text: "By accessing or using Global Software solutions, you agree to be bound by these Terms of Service."
+        },
+        {
+          title: "2. Software License",
+          text: "We grant you a limited, non-exclusive, non-transferable license to use our software according to the plan you have purchased."
+        },
+        {
+          title: "3. Payment Terms",
+          text: "Payments are made via UPI or other approved methods. Subscriptions are billed in advance according to the selected monthly, yearly, or lifetime plan."
+        },
+        {
+          title: "4. Limitation of Liability",
+          text: "Global Software shall not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use our services."
+        }
+      ]
+    },
+    refund: {
+      title: "Refund Policy",
+      lastUpdated: "March 23, 2026",
+      sections: [
+        {
+          title: "1. Free Demo Period",
+          text: "We offer a comprehensive 7-day free demo for all our software products. This allows you to fully evaluate the features and suitability of our solutions before making a purchase."
+        },
+        {
+          title: "2. No Refund Policy",
+          text: "Due to the nature of digital software and the availability of a free trial period, we do not offer refunds once a purchase has been made. All sales are final."
+        },
+        {
+          title: "3. Cancellation",
+          text: "You can cancel your monthly or yearly subscription at any time. Your access will continue until the end of the current billing cycle, but no partial refunds will be provided."
+        }
+      ]
+    }
+  };
+
+  const activePolicy = content[type];
+
+  return (
+    <div className="pt-32 pb-20 px-4 min-h-screen bg-white">
+      <div className="max-w-4xl mx-auto">
+        <button 
+          onClick={onClose}
+          className="mb-8 flex items-center gap-2 text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
+        >
+          <ArrowRight size={20} className="rotate-180" /> Back to Home
+        </button>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">{activePolicy.title}</h1>
+          <p className="text-slate-500 mb-12">Last Updated: {activePolicy.lastUpdated}</p>
+          
+          <div className="space-y-12">
+            {activePolicy.sections.map((section, idx) => (
+              <div key={idx}>
+                <h2 className="text-2xl font-bold text-slate-800 mb-4">{section.title}</h2>
+                <p className="text-slate-600 leading-relaxed text-lg">{section.text}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-16 p-8 bg-slate-50 rounded-3xl border border-slate-100">
+            <p className="text-slate-700 font-medium">
+              If you have any questions about our {activePolicy.title.toLowerCase()}, please contact us at <a href="mailto:patelmunaf90@gmail.com" className="text-indigo-600 font-bold hover:underline">patelmunaf90@gmail.com</a>.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+const Navbar = ({ onHomeClick }: { onHomeClick: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center">
+          <div className="flex items-center cursor-pointer" onClick={onHomeClick}>
             <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
               Global Software
             </span>
@@ -151,12 +252,6 @@ const Navbar = () => {
             <a href="#pricing" className="text-slate-600 hover:text-indigo-600 transition-colors">Pricing</a>
             <a href="#contact" className="text-slate-600 hover:text-indigo-600 transition-colors">Contact</a>
             <div className="flex items-center space-x-4">
-              <a 
-                href="tel:8200109488" 
-                className="flex items-center gap-2 text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
-              >
-                <Phone size={18} /> 8200109488
-              </a>
               <a 
                 href="#demo" 
                 className="hidden md:flex bg-indigo-600 text-white px-5 py-2 rounded-full font-medium hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200"
@@ -188,13 +283,7 @@ const Navbar = () => {
               <a href="#why-us" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-slate-600">Why Choose Us</a>
               <a href="#pricing" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-slate-600">Pricing</a>
               <a href="#contact" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-slate-600">Contact</a>
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <a 
-                  href="tel:8200109488" 
-                  className="flex items-center justify-center gap-2 bg-slate-100 text-slate-700 px-5 py-3 rounded-xl font-medium active:bg-slate-200"
-                >
-                  <Phone size={18} /> Call
-                </a>
+              <div className="grid grid-cols-1 gap-3 mt-4">
                 <a 
                   href="https://wa.me/918200109488" 
                   target="_blank"
@@ -252,12 +341,6 @@ const Hero = () => {
               >
                 <MessageCircle size={20} className="text-green-500" /> WhatsApp
               </a>
-              <a 
-                href="tel:8200109488" 
-                className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 px-6 py-4 rounded-2xl font-bold text-lg hover:border-indigo-600 hover:text-indigo-600 transition-all hover:-translate-y-1 active:scale-95"
-              >
-                <Phone size={20} className="text-indigo-600" /> Call Now
-              </a>
             </div>
           </div>
           <div className="mt-10 flex items-center gap-4 text-slate-500">
@@ -293,6 +376,33 @@ const Hero = () => {
         </motion.div>
       </div>
     </section>
+  );
+};
+
+const Stats = () => {
+  const stats = [
+    { label: "Active Clients", value: "500+", icon: <Users size={20} /> },
+    { label: "Countries Supported", value: "10+", icon: <Globe size={20} /> },
+    { label: "Uptime Guarantee", value: "99.9%", icon: <Zap size={20} /> },
+    { label: "Support Response", value: "< 1hr", icon: <Headphones size={20} /> },
+  ];
+
+  return (
+    <div className="bg-white py-12 border-y border-slate-100">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((stat, idx) => (
+            <div key={idx} className="text-center">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 mb-3">
+                {stat.icon}
+              </div>
+              <div className="text-3xl font-extrabold text-slate-900">{stat.value}</div>
+              <div className="text-sm font-medium text-slate-500">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -439,6 +549,63 @@ const WhyChooseUs = () => {
               </div>
               <h3 className="text-xl font-bold mb-2">{reason.title}</h3>
               <p className="text-slate-400">{reason.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Testimonials = () => {
+  const reviews = [
+    {
+      text: "Global Software ka Medical App bahut hi simple hai. Stock management ab mere liye bahut aasaan ho gaya hai.",
+      image: "https://picsum.photos/seed/doc1/100/100"
+    },
+    {
+      text: "The student management system is robust and very intuitive. Our administrative tasks have reduced by 40%.",
+      image: "https://picsum.photos/seed/principal1/100/100"
+    },
+    {
+      text: "Excellent support team! They helped us set up everything in just one day. Highly recommended for pharmacies.",
+      image: "https://picsum.photos/seed/manager1/100/100"
+    }
+  ];
+
+  return (
+    <section className="py-24 px-4 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">What Our Clients Say</h2>
+          <p className="text-slate-600">Trusted by business owners worldwide for reliability and ease of use.</p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {reviews.map((review, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="bg-slate-50 p-8 rounded-3xl border border-slate-100 relative"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src={review.image} 
+                  alt="Client Avatar" 
+                  className="w-12 h-12 rounded-full border-2 border-white shadow-sm"
+                  referrerPolicy="no-referrer"
+                />
+                <div>
+                  <p className="text-sm font-bold text-indigo-600">Verified Client</p>
+                </div>
+              </div>
+              <p className="text-slate-600 italic">"{review.text}"</p>
+              <div className="absolute top-8 right-8 text-indigo-200">
+                <MessageCircle size={40} fill="currentColor" />
+              </div>
             </motion.div>
           ))}
         </div>
@@ -686,6 +853,73 @@ const Pricing = () => {
   );
 };
 
+const FAQ = () => {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      q: "Software setup karne mein kitna time lagta hai?",
+      a: "Humara setup process bahut fast hai. Payment ke baad hum 24 ghante ke andar aapka system live kar dete hain."
+    },
+    {
+      q: "Kya main demo data delete kar sakta hoon?",
+      a: "Haan, jab aap full version kharidte hain, toh hum aapko ek fresh database dete hain jisme aap apna real data enter kar sakte hain."
+    },
+    {
+      q: "Support kaise milega agar koi problem aaye?",
+      a: "Hum 24/7 WhatsApp aur Email support dete hain. Emergency mein hum remote access (AnyDesk/TeamViewer) se bhi help karte hain."
+    },
+    {
+      q: "Kya ye software offline kaam karta hai?",
+      a: "Humare paas online (Cloud) aur offline dono options available hain. Aap apni zaroorat ke hisaab se choose kar sakte hain."
+    }
+  ];
+
+  return (
+    <section className="py-24 px-4 bg-white">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
+          <p className="text-slate-600">Everything you need to know about Global Software solutions.</p>
+        </div>
+
+        <div className="space-y-4">
+          {faqs.map((faq, idx) => (
+            <div 
+              key={idx} 
+              className="border border-slate-100 rounded-2xl overflow-hidden bg-slate-50"
+            >
+              <button 
+                onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+                className="w-full px-6 py-5 text-left flex justify-between items-center hover:bg-slate-100 transition-colors"
+              >
+                <span className="font-bold text-slate-900">{faq.q}</span>
+                <span className={`transition-transform duration-300 ${openIdx === idx ? 'rotate-180' : ''}`}>
+                  <ArrowRight size={20} className="rotate-90 text-indigo-600" />
+                </span>
+              </button>
+              <AnimatePresence>
+                {openIdx === idx && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6 text-slate-600 leading-relaxed">
+                      {faq.a}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Contact = () => {
   return (
     <section id="contact" className="py-24 px-4 bg-white">
@@ -697,21 +931,6 @@ const Contact = () => {
           </p>
           
           <div className="space-y-8">
-            <a 
-              href="tel:8200109488"
-              className="flex items-center gap-6 group cursor-pointer"
-            >
-              <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-100 transition-colors group-active:scale-95">
-                <Phone size={24} />
-              </div>
-              <div>
-                <p className="text-sm text-slate-500 font-medium uppercase tracking-wider group-hover:text-indigo-600 transition-colors">Call Us</p>
-                <p className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                  8200109488
-                </p>
-              </div>
-            </a>
-            
             <a 
               href="https://wa.me/918200109488"
               target="_blank"
@@ -762,18 +981,36 @@ const Contact = () => {
         <div className="bg-slate-50 p-8 md:p-10 rounded-3xl border border-slate-100 shadow-sm">
           <form 
             className="space-y-6" 
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              const name = formData.get('name');
-              const phone = formData.get('phone');
-              const product = formData.get('product');
-              const message = formData.get('message');
-              const text = `Hi, I'm ${name} (${phone}). I'm interested in ${product}. Message: ${message}`;
-              window.open(`https://wa.me/918200109488?text=${encodeURIComponent(text)}`, '_blank');
+              const form = e.currentTarget;
+              const formData = new FormData(form);
+              const data = {
+                name: formData.get('name'),
+                phone: formData.get('phone'),
+                product: formData.get('product'),
+                message: formData.get('message'),
+              };
+
+              // Send to WhatsApp
+              const waText = `Hi, I'm ${data.name} (${data.phone}). I'm interested in ${data.product}. Message: ${data.message}`;
+              window.open(`https://wa.me/918200109488?text=${encodeURIComponent(waText)}`, '_blank');
+
+              // Also send Email via API
+              try {
+                await fetch('/api/contact', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(data),
+                });
+                alert('Thank you! Your inquiry has been sent via WhatsApp and Email.');
+                form.reset();
+              } catch (err) {
+                console.error('Email failed but WhatsApp opened');
+              }
             }}
           >
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-1 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Full Name</label>
                 <input 
@@ -781,16 +1018,6 @@ const Contact = () => {
                   type="text" 
                   required
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">Phone Number</label>
-                <input 
-                  name="phone"
-                  type="tel" 
-                  required
-                  placeholder="8200109488"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
                 />
               </div>
@@ -829,7 +1056,108 @@ const Contact = () => {
   );
 };
 
-const Footer = () => {
+const TechStack = () => {
+  const techs = [
+    { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+    { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+    { name: "Cloud", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" },
+    { name: "WhatsApp API", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+    { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+    { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+  ];
+
+  return (
+    <section className="py-16 bg-slate-50 border-y border-slate-100">
+      <div className="max-w-7xl mx-auto px-4">
+        <p className="text-center text-sm font-bold text-slate-400 uppercase tracking-widest mb-10">Powered by Modern Tech Stack</p>
+        <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+          {techs.map((tech, idx) => (
+            <div key={idx} className="flex flex-col items-center gap-2 group">
+              <img src={tech.icon} alt={tech.name} className="w-10 h-10 group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-bold text-slate-500">{tech.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Newsletter = () => {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setEmail("");
+      } else {
+        const data = await response.json();
+        alert(data.error || 'Something went wrong. Please check your SMTP settings.');
+        setStatus('idle');
+      }
+    } catch (error) {
+      console.error('Subscription error:', error);
+      alert('Failed to connect to the server. Please check your internet connection.');
+      setStatus('idle');
+    }
+  };
+
+  return (
+    <section className="py-24 px-4 bg-indigo-600 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
+      </div>
+      
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Stay Updated with Global Software</h2>
+        <p className="text-indigo-100 mb-10 text-lg">Subscribe to our newsletter to get the latest updates on our products and exclusive offers.</p>
+        
+        {status === 'success' ? (
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 inline-block"
+          >
+            <p className="text-white font-bold flex items-center gap-2">
+              <Zap size={20} className="text-yellow-400" /> Thank you for subscribing!
+            </p>
+          </motion.div>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+            <input 
+              type="email" 
+              required
+              placeholder="Enter your email address"
+              className="flex-1 px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-indigo-200 focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button 
+              disabled={status === 'loading'}
+              className="px-8 py-4 bg-white text-indigo-600 font-bold rounded-2xl hover:bg-indigo-50 transition-all shadow-lg disabled:opacity-50"
+            >
+              {status === 'loading' ? 'Subscribing...' : 'Subscribe Now'}
+            </button>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+};
+
+const Footer = ({ onPolicyClick }: { onPolicyClick: (type: 'privacy' | 'terms' | 'refund') => void }) => {
   return (
     <footer className="bg-slate-950 text-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
@@ -840,12 +1168,6 @@ const Footer = () => {
               Your Digital Partner for smart business solutions. We empower schools and medical stores with cutting-edge technology.
             </p>
             <div className="flex gap-4">
-              <a 
-                href="tel:8200109488" 
-                className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-indigo-600 transition-colors active:scale-90"
-              >
-                <Phone size={18} />
-              </a>
               <a 
                 href="https://wa.me/918200109488" 
                 target="_blank"
@@ -877,9 +1199,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Legal</h3>
             <ul className="space-y-4 text-slate-400">
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Refund Policy</a></li>
+              <li><button onClick={() => onPolicyClick('privacy')} className="hover:text-white transition-colors">Privacy Policy</button></li>
+              <li><button onClick={() => onPolicyClick('terms')} className="hover:text-white transition-colors">Terms of Service</button></li>
+              <li><button onClick={() => onPolicyClick('refund')} className="hover:text-white transition-colors">Refund Policy</button></li>
             </ul>
           </div>
         </div>
@@ -893,19 +1215,73 @@ const Footer = () => {
   );
 };
 
+const ScrollToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 500) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          onClick={scrollToTop}
+          className="fixed bottom-32 right-8 z-50 w-12 h-12 bg-white text-indigo-600 rounded-full shadow-xl border border-slate-100 flex items-center justify-center hover:bg-indigo-50 transition-colors"
+        >
+          <ArrowRight size={24} className="-rotate-90" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
+  const [view, setView] = useState<'home' | 'privacy' | 'terms' | 'refund'>('home');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
+
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      <Navbar />
+      <Navbar onHomeClick={() => setView('home')} />
       <main>
-        <Hero />
-        <Products />
-        <WhyChooseUs />
-        <DemoSection />
-        <Pricing />
-        <Contact />
+        {view === 'home' ? (
+          <>
+            <Hero />
+            <Stats />
+            <TechStack />
+            <Products />
+            <WhyChooseUs />
+            <Testimonials />
+            <DemoSection />
+            <Pricing />
+            <FAQ />
+            <Newsletter />
+            <Contact />
+          </>
+        ) : (
+          <PolicyView type={view as any} onClose={() => setView('home')} />
+        )}
       </main>
-      <Footer />
+      <Footer onPolicyClick={(type) => setView(type)} />
+      <ScrollToTop />
       
       {/* Floating Action Buttons */}
       <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
@@ -927,15 +1303,6 @@ export default function App() {
           <Mail size={32} />
           <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-white text-slate-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
             Email Us
-          </span>
-        </a>
-        <a 
-          href="tel:8200109488" 
-          className="bg-indigo-600 text-white p-4 rounded-full shadow-2xl hover:bg-indigo-700 transition-all hover:scale-110 group relative"
-        >
-          <Phone size={32} />
-          <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-white text-slate-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Call Us Now
           </span>
         </a>
       </div>
