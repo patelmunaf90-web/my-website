@@ -7,7 +7,11 @@
       "headers": [
         {
           "key": "Content-Type",
-          "value": "application/xml"
+          "value": "text/xml"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "all"
         },
         {
           "key": "Cache-Control",
@@ -21,19 +25,15 @@
         {
           "key": "Content-Type",
           "value": "text/plain"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "all"
         }
       ]
     }
   ],
   "rewrites": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/robots.txt"
-    },
     {
       "source": "/privacy",
       "destination": "/index.html"
@@ -47,7 +47,7 @@
       "destination": "/index.html"
     },
     {
-      "source": "/((?!api|sitemap\\.xml|robots\\.txt|static|assets|.*\\..*).*)",
+      "source": "/((?!api|static|assets|.*\\.).*)",
       "destination": "/index.html"
     }
   ]
