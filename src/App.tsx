@@ -70,57 +70,14 @@ const PaymentModal = ({ isOpen, onClose, planName, price }: { isOpen: boolean, o
             </div>
           </div>
 
-          <div className="bg-slate-50 p-6 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center mb-8">
-            <div className="bg-white p-4 rounded-2xl shadow-sm mb-4">
+          <div className="bg-slate-50 p-6 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
+            <div className="bg-white p-4 rounded-2xl shadow-sm">
               <img 
                 src={qrCodeUrl} 
                 alt="Payment QR Code" 
                 className="w-48 h-48"
               />
             </div>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Scan with any UPI App</p>
-            <div className="flex gap-4 mt-4 opacity-60">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" className="h-4" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/PhonePe_Logo.svg" alt="PhonePe" className="h-4" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Google_Pay_Logo.svg" alt="GPay" className="h-4" />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Primary UPI ID</p>
-                <p className="font-mono font-bold text-slate-700">{upiId}</p>
-              </div>
-              <button 
-                onClick={() => copyToClipboard(upiId)}
-                className="p-3 bg-white hover:bg-indigo-50 text-indigo-600 rounded-xl shadow-sm transition-all active:scale-95"
-              >
-                {copied ? <CheckCircle2 size={20} className="text-green-500" /> : <Copy size={20} />}
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Other UPI ID</p>
-                <p className="text-xs font-mono font-bold text-slate-600">fzspatel007@ibl</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8">
-            <a 
-              href={upiUrl}
-              className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-[0.98]"
-            >
-              <ExternalLink size={20} /> Pay via App
-            </a>
-            <p className="text-center text-slate-400 text-[10px] mt-2">
-              (Works on mobile with UPI apps installed)
-            </p>
-            <p className="text-center text-slate-400 text-xs mt-4">
-              After payment, please share the screenshot on WhatsApp.
-            </p>
           </div>
         </div>
       </motion.div>
