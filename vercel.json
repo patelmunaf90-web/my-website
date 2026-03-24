@@ -35,10 +35,6 @@
       "destination": "/robots.txt"
     },
     {
-      "source": "/google:path.html",
-      "destination": "/google:path.html"
-    },
-    {
       "source": "/privacy",
       "destination": "/index.html"
     },
@@ -51,7 +47,7 @@
       "destination": "/index.html"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api|sitemap\\.xml|robots\\.txt|static|assets|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
