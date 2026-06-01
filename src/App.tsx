@@ -36,6 +36,99 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
+const GlobalLogo = ({ className = "h-11", showText = true, light = false }: { className?: string, showText?: boolean, light?: boolean }) => {
+  return (
+    <div className={`flex items-center gap-3.5 select-none ${className}`}>
+      {/* Dynamic Network Globe Icon inspired by uploaded asset */}
+      <svg
+        viewBox="0 0 100 100"
+        className="w-11 h-11 shrink-0 group-hover:scale-105 transition-transform duration-300"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="globeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2dd4bf" />
+            <stop offset="40%" stopColor="#0d9488" />
+            <stop offset="80%" stopColor="#0284c7" />
+            <stop offset="100%" stopColor="#0369a1" />
+          </linearGradient>
+          <linearGradient id="globeGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#0369a1" stopOpacity="0.1" />
+          </linearGradient>
+        </defs>
+
+        {/* Ambient background sphere ring */}
+        <circle cx="50" cy="50" r="46" stroke="url(#globeGlow)" strokeWidth="1.5" />
+
+        {/* Main outer network orbit sphere */}
+        <circle cx="50" cy="50" r="41" stroke="url(#globeGrad)" strokeWidth="2.5" opacity="0.9" />
+
+        {/* Dynamic network curved connections (latitudes) */}
+        <path d="M 14,30 C 26,38 74,38 86,30" stroke="url(#globeGrad)" strokeWidth="1.5" opacity="0.7" strokeLinecap="round" />
+        <path d="M 9,50 C 23,60 77,60 91,50" stroke="url(#globeGrad)" strokeWidth="2" opacity="0.85" strokeLinecap="round" />
+        <path d="M 14,70 C 26,78 74,78 86,70" stroke="url(#globeGrad)" strokeWidth="1.5" opacity="0.7" strokeLinecap="round" />
+
+        {/* Longitude grid connections */}
+        <path d="M 30,14 C 38,26 38,74 30,86" stroke="url(#globeGrad)" strokeWidth="1.5" opacity="0.7" strokeLinecap="round" />
+        <path d="M 50,9 C 60,23 60,77 50,91" stroke="url(#globeGrad)" strokeWidth="2" opacity="0.85" strokeLinecap="round" />
+        <path d="M 68,14 C 76,26 76,74 68,86" stroke="url(#globeGrad)" strokeWidth="1.5" opacity="0.7" strokeLinecap="round" />
+
+        {/* Secondary network paths */}
+        <path d="M 22,22 C 36,36 64,36 78,22" stroke="url(#globeGrad)" strokeWidth="1.2" opacity="0.5" strokeLinecap="round" />
+        <path d="M 22,78 C 36,64 64,64 78,78" stroke="url(#globeGrad)" strokeWidth="1.2" opacity="0.5" strokeLinecap="round" />
+
+        {/* Connecting System Nodes (small dots on vertices) */}
+        <circle cx="50" cy="9" r="3.2" fill="#2dd4bf" />
+        <circle cx="50" cy="91" r="3.2" fill="#0369a1" />
+        <circle cx="9" cy="50" r="3.2" fill="#2dd4bf" />
+        <circle cx="91" cy="50" r="3.2" fill="#0369a1" />
+        
+        <circle cx="22" cy="22" r="2.8" fill="#2dd4bf" />
+        <circle cx="78" cy="22" r="2.8" fill="#0d9488" />
+        <circle cx="22" cy="78" r="2.8" fill="#0284c7" />
+        <circle cx="78" cy="78" r="2.8" fill="#0369a1" />
+
+        <circle cx="36" cy="36" r="2.2" fill="#0d9488" opacity="0.9" />
+        <circle cx="64" cy="36" r="2.2" fill="#0d9488" opacity="0.9" />
+        <circle cx="36" cy="64" r="2.2" fill="#0284c7" opacity="0.9" />
+        <circle cx="64" cy="64" r="2.2" fill="#0284c7" opacity="0.9" />
+
+        {/* Stylized Modern Letter "S" Curve integrated beautifully into the center */}
+        <path 
+          d="M 60,35
+             C 60,25 53,20 46,20 
+             C 38,20 34,26 34,34 
+             C 34,44.5 66,42.5 66,55.5 
+             C 66,65.5 59,71.5 48,71.5 
+             C 38,71.5 34,64.5 34,56.5
+             L 43.5,56.5
+             C 43.5,61 45.5,64 48.5,64 
+             C 52.5,64 56.5,61 56.5,55.5 
+             C 56.5,47 24,49 24,33 
+             C 24,21.5 34,12.5 46,12.5 
+             C 58,12.5 69.5,19.5 69.5,35 
+             Z" 
+          fill="url(#globeGrad)"
+          className="drop-shadow-[0_2px_5px_rgba(13,148,136,0.25)]"
+        />
+      </svg>
+
+      {showText && (
+        <div className="flex flex-col text-left justify-center select-none leading-none">
+          <span className={`text-[21px] font-black tracking-tight font-display ${light ? 'text-white' : 'text-slate-900 group-hover:text-indigo-600'} transition-colors`}>
+            GLOBAL
+          </span>
+          <span className={`text-[11px] font-bold tracking-[0.27em] -mr-[0.27em] mt-1 font-sans ${light ? 'text-slate-400' : 'text-slate-500'}`}>
+            SOFTWARE
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const PaymentModal = ({ isOpen, onClose, planName, price }: { isOpen: boolean, onClose: () => void, planName: string, price: string }) => {
   const [copied, setCopied] = useState(false);
   const upiId = "fzspatel007@ybl";
@@ -201,13 +294,8 @@ const Navbar = ({ onHomeClick }: { onHomeClick: () => void }) => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-100/80 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          <div className="flex items-center cursor-pointer gap-2 group" onClick={onHomeClick}>
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-150 group-hover:scale-105 transition-transform">
-              <Sparkles size={20} className="animate-pulse" />
-            </div>
-            <span className="text-2xl font-extrabold tracking-tight font-display bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">
-              Global Software
-            </span>
+          <div className="flex items-center cursor-pointer group" onClick={onHomeClick}>
+            <GlobalLogo />
           </div>
           
           <div className="hidden md:flex items-center space-x-10">
@@ -280,7 +368,7 @@ const Navbar = ({ onHomeClick }: { onHomeClick: () => void }) => {
 
 const Hero = () => {
   return (
-    <section className="relative pt-36 pb-24 px-4 bg-gradient-to-b from-indigo-50/40 via-white to-white overflow-hidden">
+    <section className="relative pt-36 pb-32 px-4 bg-gradient-to-b from-indigo-50/40 via-white to-white overflow-hidden">
       {/* Decorative background grid effect */}
       <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-60 pointer-events-none"></div>
 
@@ -352,7 +440,7 @@ const Hero = () => {
               referrerPolicy="no-referrer"
             />
             {/* Elegant overlay card for trust score */}
-            <div className="absolute -bottom-6 -right-4 bg-white/95 backdrop-blur-md border border-slate-100 shadow-[0_12px_40px_rgba(15,23,42,0.1)] p-4 rounded-2xl flex items-center gap-4.5 animate-bounce-slow">
+            <div className="absolute -bottom-20 -right-4 bg-white/95 backdrop-blur-md border border-slate-100 shadow-[0_12px_40px_rgba(15,23,42,0.1)] p-4 rounded-2xl flex items-center gap-4.5 animate-bounce-slow">
               <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
                 <Sparkles size={22} className="fill-orange-500/20" />
               </div>
@@ -1552,9 +1640,9 @@ const Footer = ({ onPolicyClick }: { onPolicyClick: (type: 'privacy' | 'terms' |
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-2 text-left">
-            <h2 className="text-2xl font-extrabold tracking-tight mb-4 font-display text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-200">
-              Global Software
-            </h2>
+            <div className="mb-5">
+              <GlobalLogo light={true} />
+            </div>
             <p className="text-slate-400 text-sm max-w-sm mb-6 font-sans leading-relaxed">
               Your sovereign engineering partner for agile systems automation. Powering hundreds of schools, institutes, builders, and medical depots with secure, performant software arrays.
             </p>
